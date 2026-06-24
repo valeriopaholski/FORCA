@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forca v5</title>
+<style>
+body{font-family:Arial;text-align:center}
+button,input{margin:5px;padding:8px}
+</style>
+</head>
+<body>
+<h2>Forca Multiplayer v5</h2>
+
+<div id="menu">
+<input id="name" placeholder="Nome"><br>
+<input id="room" placeholder="Sala"><br>
+<button onclick="createRoom()">Criar Sala</button>
+<button onclick="joinRoom()">Entrar Sala</button>
+</div>
+
+<div id="game" style="display:none">
+<h3>Defina sua palavra</h3>
+<input id="word"><button onclick="setWord()">Salvar</button>
+
+<h3>Palavras dos outros</h3>
+<div id="words"></div>
+
+<input id="letter" maxlength="1">
+<button onclick="guess()">Chutar letra</button>
+
+<h3>Ranking</h3>
+<div id="scores"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
