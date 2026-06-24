@@ -11,72 +11,52 @@ app.use(express.static('public'));
 
 let rooms = {};
 
-function createRoom(id, hostId) {
-  rooms[id] = {
-    players: [],
-    words: {}, // cada jogador define sua palavra
-    guesses: {},
-    scores: {},
-    turn: 0
-  };
-}
-
 io.on('connection', (socket) => {
 
-socket.on('createRoom', ({roomId, name}) => {
-  createRoom(roomId, socket.id);
-  socket.join(roomId);
-
-  let room = rooms[roomId];
-  room.players.push({id: socket.id, name});
-  room.scores[socket.id] = 0;
-
-  io.to(roomId).emit('state', room);
-});
-
 socket.on('joinRoom', ({roomId, name}) => {
-  let room = rooms[roomId];
-  if (!room || room.players.length >= 4) return;
+ if (!rooms[roomId]){
+   rooms[roomId]={players:[],words:{},guesses:{},errors:{},scores:{},turn:0};
+ }
+ let room=rooms[roomId];
+ if(room.players.length>=4) return;
 
-  socket.join(roomId);
-  room.players.push({id: socket.id, name});
-  room.scores[socket.id] = 0;
+ socket.join(roomId);
+ room.players.push({id:socket.id,name});
+ room.scores[socket.id]=0;
+ room.errors[socket.id]=0;
+ room.guesses[socket.id]=[];
 
-  io.to(roomId).emit('state', room);
+ io.to(roomId).emit('state',room);
 });
 
-socket.on('setWord', ({roomId, word}) => {
-  let room = rooms[roomId]; if (!room) return;
-  room.words[socket.id] = word.toLowerCase();
-  room.guesses[socket.id] = [];
-
-  io.to(roomId).emit('state', room);
+socket.on('setWord',({roomId,word})=>{
+ let room=rooms[roomId]; if(!room) return;
+ room.words[socket.id]=word.toLowerCase();
+ io.to(roomId).emit('state',room);
 });
 
-socket.on('guess', ({roomId, letter}) => {
-  let room = rooms[roomId]; if (!room) return;
+socket.on('guess',({roomId,letter})=>{
+ let room=rooms[roomId]; if(!room) return;
+ let current=room.players[room.turn];
+ if(current.id!==socket.id) return;
 
-  let currentPlayer = room.players[room.turn];
-  if (currentPlayer.id !== socket.id) return;
-
-  // jogador tenta adivinhar palavra dos outros
-  room.players.forEach(p => {
-    if (p.id !== socket.id && room.words[p.id]) {
-      if (!room.guesses[p.id].includes(letter)) {
-        room.guesses[p.id].push(letter);
-
-        if (room.words[p.id].includes(letter)) {
-          room.scores[socket.id] += 10;
-        }
+ room.players.forEach(p=>{
+  if(p.id!==socket.id && room.words[p.id]){
+    if(!room.guesses[p.id].includes(letter)){
+      room.guesses[p.id].push(letter);
+      if(room.words[p.id].includes(letter)){
+        room.scores[socket.id]+=10;
+      } else {
+        room.errors[p.id]++;
       }
     }
-  });
+  }
+ });
 
-  room.turn = (room.turn + 1) % room.players.length;
-
-  io.to(roomId).emit('state', room);
+ room.turn=(room.turn+1)%room.players.length;
+ io.to(roomId).emit('state',room);
 });
 
 });
 
-server.listen(3000, () => console.log('v5 rodando'));
+server.listen(3000,()=>console.log('v6 rodando'));

@@ -1,20 +1,10 @@
 
-const socket = io();
+const socket=io();
 let room='';
-let name='';
-
-function createRoom(){
- room=document.getElementById('room').value;
- name=document.getElementById('name').value;
- socket.emit('createRoom',{roomId:room,name});
- document.getElementById('menu').style.display='none';
- document.getElementById('game').style.display='block';
-}
 
 function joinRoom(){
  room=document.getElementById('room').value;
- name=document.getElementById('name').value;
- socket.emit('joinRoom',{roomId:room,name});
+ socket.emit('joinRoom',{roomId:room,name:document.getElementById('name').value});
  document.getElementById('menu').style.display='none';
  document.getElementById('game').style.display='block';
 }
@@ -28,18 +18,28 @@ function guess(){
 }
 
 socket.on('state',(data)=>{
- let wordsHtml='';
+ document.getElementById('players').innerText = 'Jogadores online: '+data.players.length;
+
+ let html='';
  data.players.forEach(p=>{
   if(p.id!==socket.id && data.words[p.id]){
     let w='';
     data.words[p.id].split('').forEach(l=>{
-      w += data.guesses[p.id]?.includes(l)?l:'_';
+      w+=data.guesses[p.id].includes(l)?l:'_';
       w+=' ';
     });
-    wordsHtml += p.name+': '+w+'<br>';
+
+    let errors=data.errors[p.id]||0;
+
+    html+=`<div class='card'>
+      <b>${p.name}</b><br>
+      ${w}<br>
+      Letras: ${data.words[p.id].length}<br>
+      Erros: ${errors}/6
+    </div>`;
   }
  });
- document.getElementById('words').innerHTML=wordsHtml;
+ document.getElementById('boards').innerHTML=html;
 
  let s='';
  data.players.forEach(p=>{

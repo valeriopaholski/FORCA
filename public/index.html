@@ -4,33 +4,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Forca v5</title>
+<title>Forca v6</title>
 <style>
 body{font-family:Arial;text-align:center}
-button,input{margin:5px;padding:8px}
+.card{border:1px solid #ccc;margin:10px;padding:10px;border-radius:10px}
 </style>
 </head>
 <body>
-<h2>Forca Multiplayer v5</h2>
+<h2>Forca v6</h2>
 
 <div id="menu">
 <input id="name" placeholder="Nome"><br>
 <input id="room" placeholder="Sala"><br>
-<button onclick="createRoom()">Criar Sala</button>
-<button onclick="joinRoom()">Entrar Sala</button>
+<button onclick="joinRoom()">Entrar / Criar</button>
 </div>
 
 <div id="game" style="display:none">
-<h3>Defina sua palavra</h3>
-<input id="word"><button onclick="setWord()">Salvar</button>
+<h3 id="players"></h3>
 
-<h3>Palavras dos outros</h3>
-<div id="words"></div>
+<input id="word"><button onclick="setWord()">Minha Palavra</button>
+
+<div id="boards"></div>
 
 <input id="letter" maxlength="1">
-<button onclick="guess()">Chutar letra</button>
+<button onclick="guess()">Chutar</button>
 
-<h3>Ranking</h3>
 <div id="scores"></div>
 </div>
 
