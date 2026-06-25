@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang='pt-br'>
+<head>
+<meta charset='UTF-8'>
+<title>Forca Online V15</title>
+<style>
+body{font-family:Arial;background:#1e73d8;margin:0;padding:20px;text-align:center}
+.card{background:#fff;padding:20px;border-radius:10px;display:inline-block;}
+.player{display:inline-block;margin:10px;padding:10px;border-radius:8px;background:#eef}
+.me{border:3px solid #1e73d8}
+canvas{background:#fff;border:1px solid #ccc}
+button{background:#fff;color:#1e73d8;border:2px solid #1e73d8;padding:8px;margin:5px;border-radius:6px;font-weight:bold}
+button:hover{background:#1e73d8;color:white}
+.word{font-size:20px;letter-spacing:6px}
+</style>
+</head>
+<body>
+<div class='card' id='menu'>
+<h2>Forca Online</h2>
+<input id='name' placeholder='Nome'>
+<input id='room' placeholder='Sala'>
+<br><button onclick='joinRoom()'>Entrar</button>
+</div>
+
+<div id='game' style='display:none'></div>
+
+<script src='/socket.io/socket.io.js'></script>
+<script src='app.js'></script>
+</body>
+</html>
