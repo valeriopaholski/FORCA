@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang='pt-br'>
+<head>
+<meta charset='UTF-8'>
+<title>Forca V17</title>
+<style>
+body{background:#1e73d8;font-family:Arial;text-align:center}
+.player{display:inline-block;background:#fff;margin:10px;padding:10px;border-radius:8px}
+.me{border:3px solid #1e73d8}
+canvas{background:#fff}
+</style>
+</head>
+<body>
+<div id='menu'>
+<input id='name' placeholder='Nome'>
+<input id='room' placeholder='Sala'>
+<button onclick='join()'>Entrar</button>
+</div>
+<div id='game'></div>
+<script src='/socket.io/socket.io.js'></script>
+<script src='app.js'></script>
+</body>
+</html>
